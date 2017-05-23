@@ -1,5 +1,5 @@
 {
-  "name": "hello-blockstack",
+  "name": "hello-blockstack-nth-time",
   "version": "0.0.0",
   "description": "A simple Blockstack app",
   "main": "index.js",
@@ -22,7 +22,7 @@
     "express": "^4.15.2"
   },
   "dependencies": {
-    "blockstack": "^0.2.13",
+    "blockstack": "^0.3.6",
     "blockstack-storage": "^0.0.1"
   }
 }
