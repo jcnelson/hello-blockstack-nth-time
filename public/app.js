@@ -9,7 +9,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   function getLoginCount() {
     return new Promise((resolve, reject) => {
-      blockstack.getFile('settings.json', "{}").then((data) => {
+      blockstack.getFile('settings.json').then((data) => {
+        if (data === null) { data = "{}" }
         var settings = JSON.parse(data)
         settings.count = settings.count + 1
         blockstack.putFile('settings.json', settings).then((success) => {
