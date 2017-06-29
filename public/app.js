@@ -35,8 +35,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
        // render login count
        var person = new blockstack.Person(profile)
-       document.getElementById('heading-name').innerHTML = person.name() + ' (login count: ' + JSON.stringify(settings.count) + ')'
-       document.getElementById('avatar-image').setAttribute('src', person.avatarUrl())
+       var name = person.name() ? person.name() : 'Blockstacker'
+       document.getElementById('heading-name').innerHTML = name
+       document.getElementById('count').innerHTML = 'Your login count: ' + JSON.stringify(settings.count)
+       document.getElementById('avatar-image').setAttribute('src', person.avatarUrl() ? person.avatarUrl() : '/avatar.png' )
        document.getElementById('section-1').style.display = 'none'
        document.getElementById('section-2').style.display = 'block'
        document.getElementById('section-3').style.display = 'none'
