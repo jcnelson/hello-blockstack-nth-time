@@ -23,6 +23,6 @@
     "node-localstorage": "^1.3.0"
   },
   "dependencies": {
-    "blockstack": "../blockstack.js"
+    "blockstack": "0.7.0"
   }
 }

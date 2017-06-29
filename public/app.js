@@ -86,16 +86,13 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   document.getElementById('section-3').style.display = 'none'
   if (blockstack.isUserSignedIn()) {
-    console.log('already signed in')
     showProfile(blockstack.loadUserData())
   } else if (blockstack.isSignInPending()) {
-    console.log('sign in pending')
     blockstack.handlePendingSignIn()
     .then((userData) => {
-      console.log('signed in')
       window.location = window.location.origin
     }, () => {
-      console.log('sign in failed')
+      console.error('sign in failed')
     })
   }
 })
