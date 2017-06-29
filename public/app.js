@@ -1,27 +1,7 @@
-document.addEventListener("DOMContentLoaded", function(event) { 
+document.addEventListener("DOMContentLoaded", function(event) {
   document.getElementById('signin-button').addEventListener('click', function() {
-
-    // ephemeral private key (used to sign the auth request)
-    var privkey_hex = '0be113bd33b0c6d0c7167d3ebf3752531a1358dd44b5883a88d11335f8e13ca3';
-
-    // application's origin
-    var app_origin = window.location.origin;
-
-    // URL to the app's manifest file
-    var manifest_url = app_origin + "/manifest.json";
-
-    // URL to the app's successful login endpoint
-    var redirect_url = app_origin + "/login";
-
-    // capabilities requested
-    // (we want to be able to write to this app's datastore)
-    var scopes = ['store_write'];
-
-    // make auth request
-    var authRequest = blockstack.makeAuthRequest(privkey_hex, app_origin, manifest_url, redirect_url, ['store_write']);
-
     // prompt the user to sign-in
-    blockstack.redirectUserToSignIn(authRequest)
+    blockstack.redirectToSignIn()
   })
 
   document.getElementById('signout-button').addEventListener('click', function() {
@@ -40,20 +20,20 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   function updateLoginCount(profile) {
     // get the counts file...
-    return blockstack_storage.getFile("/settings.json")
+    return blockstack.getFile("/settings.json")
     .then((settings_txt) => {
        var settings = null;
        if (settings_txt === null) {
-          // does not exist 
+          // does not exist
           settings = {'count': 1};
        }
        else {
-          // increment 
+          // increment
           settings = JSON.parse(settings_txt);
           settings.count += 1;
        }
 
-       // render login count 
+       // render login count
        var person = new blockstack.Person(profile)
        document.getElementById('heading-name').innerHTML = person.name() + ' (login count: ' + JSON.stringify(settings.count) + ')'
        document.getElementById('avatar-image').setAttribute('src', person.avatarUrl())
@@ -64,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
        var startSaveTime = new Date().getTime();
 
        // save login count
-       return blockstack_storage.putFile("/settings.json", JSON.stringify(settings))
+       return blockstack.putFile("/settings.json", JSON.stringify(settings))
        .then(() => {
           // success!
           showError(null);
@@ -87,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   }
 
   function showProfile(profile) {
-    // load the person's datastore 
+    // load the person's datastore
     updateLoginCount(profile)
     .then((count) => {
        /*
@@ -106,12 +86,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
   document.getElementById('section-3').style.display = 'none'
   if (blockstack.isUserSignedIn()) {
-    blockstack.loadUserData(function(userData) {
-      showProfile(userData.profile)
-    })
+    console.log('already signed in')
+    showProfile(blockstack.loadUserData())
   } else if (blockstack.isSignInPending()) {
-    blockstack.signUserIn(function(userData) {
+    console.log('sign in pending')
+    blockstack.handlePendingSignIn()
+    .then((userData) => {
+      console.log('signed in')
       window.location = window.location.origin
+    }, () => {
+      console.log('sign in failed')
     })
   }
 })
