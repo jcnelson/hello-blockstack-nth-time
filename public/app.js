@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   if (blockstack.isUserSignedIn()) {
     showProfile(blockstack.loadUserData())
   } else if (blockstack.isSignInPending()) {
-    blockstack.handlePendingSignIn()
+    blockstack.handlePendingSignIn('http://localhost:6270/v1/names/')
     .then((userData) => {
       window.location = window.location.origin
     }, () => {
